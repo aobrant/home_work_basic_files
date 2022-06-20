@@ -2,6 +2,8 @@ from itertools import count
 from pprint import pprint
 import readline
 file_name = 'reciept.txt'
+
+
 def catalog_reader(filename:str) -> dict:
     result  = {}
     with open(file_name) as file_obj:
@@ -23,6 +25,8 @@ def catalog_reader(filename:str) -> dict:
              result[dish] = list
              file_obj.readline()
     return result
+
+
 def get_shop_list_by_dishes(dishes, person_count) ->dict:
     result = {}
     for dish in dishes :
@@ -38,31 +42,35 @@ def get_shop_list_by_dishes(dishes, person_count) ->dict:
                 res['measure'] = ingr['measure']
                 result[ingr['ingredient_name']] = res
     return result
-def make_dict(lst:list) -> dict:
-    result = {}
+
+
+def make_sorted_tuple(lst:list) -> tuple:
+    dic = {}
     for file_name in lst:
         with open(file_name) as file_obj:
             number = sum(1 for line in file_obj)
-            result[file_name] = number
+            dic[file_name] = number
+    result = sorted(dic.items(), key = lambda x:x[1])
     return result
+
+
 def print_in_file_head(file_name,count):
     with open('data.txt', 'a') as file_wt:
         file_wt.write(f'{file_name} \n {count} \n')
     return
-def print_in_file(file_name): 
-    with open('data.txt', 'a') as file_wt:
-        with open(file_name) as file_rd:
-            for line in file_rd:
-                prt = line
-                file_wt.write(prt)
-            
 
 
-
-        
-
-
-               
+def print_in_file(tuple_sorted): 
+    for i in tuple_sorted:
+         file_name = i[0]
+         count = i[1]
+         with open('data.txt', 'a') as file_wt:
+             file_wt.write(f'{file_name} \n {count} \n')
+             with open(file_name) as file_rd:
+                 for line in file_rd:
+                     prt = line
+                     file_wt.write(prt)
+    return
 
 
            
@@ -72,19 +80,14 @@ get = get_shop_list_by_dishes(['Запеченный картофель','Омл
 pprint(get)
 
 #         3я задача
+
 lst = []
 lst = ['1.txt','2.txt','3.txt']
-dt = make_dict(lst)
-tpl_sworted = sorted(dt.items(), key = lambda x:x[1]) 
+tpl_sworted = make_sorted_tuple(lst)
+
 with open('data.txt', 'w') as file_wt:
     file_wt.write('')
+print_in_file(tpl_sworted)
 
-for i in tpl_sworted:
-    file_name = i[0]
-    count = i[1]
-    print_in_file_head(file_name,count)
-for i in tpl_sworted:
-    file_name = i[0]
-    print_in_file(file_name)
 
 
